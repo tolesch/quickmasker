@@ -2,7 +2,7 @@
 
 paths:
   # REQUIRED: Update these paths
-  image_folder: "./data/images_to_annotate/" # Folder containing your JPG/PNG images
+  image_folder: "./data/cat_examples/" # Folder containing your JPG/PNG images
   # Optional: Default locations
   output_coco_file: "./output_annotations.json" # Where final COCO annotations are saved
   state_file: "./annotation_state.json" # Stores progress (current image, annotations)
