@@ -1,0 +1,49 @@
+# Config for the quickmaster annotation tool
+
+paths:
+  # REQUIRED: Update these paths
+  image_folder: "./data/images_to_annotate/" # Folder containing your JPG/PNG images
+  # Optional: Default locations
+  output_coco_file: "./output_annotations.json" # Where final COCO annotations are saved
+  state_file: "./annotation_state.json" # Stores progress (current image, annotations)
+  sam_checkpoint_dir: "./sam_models/" # Where to download/store the SAM model .pth file
+
+sam_model:
+  # Options: "vit_h" (huge, best quality), "vit_l" (large), "vit_b" (base, fastest)
+  model_type: "vit_b"
+  device: "cuda"
+
+annotation:
+  default_category_id: 1
+  default_category_name: "object"
+
+ui:
+  window_name: "QuickMasker"
+  window_width: 1600
+  window_height: 900
+
+  # Font & Text
+  font_face_str: "FONT_HERSHEY_SIMPLEX" # OpenCV font type
+  font_scale_large: 0.7 # For status lines, main messages
+  font_scale_medium: 0.6 # For instruction lines
+  font_scale_small: 0.5 # For less critical info
+  text_main_color: [220, 220, 220] # Light gray/off-white for primary text
+  text_secondary_color: [170, 170, 170] # Slightly darker gray for secondary text
+
+  # Info Panel (for text overlays)
+  info_panel_bg_color: [20, 20, 20] # Very dark gray for text background
+  info_panel_alpha: 0.85 # Transparency for text background
+  info_panel_padding: 15 # Padding within the info panels
+  info_panel_margin: 10 # Margin from window edges
+
+  # Points & Mask
+  point_radius: 6
+  positive_color: [50, 200, 50] # A slightly softer green
+  negative_color: [50, 50, 220] # A slightly softer red
+  mask_alpha: 0.45 # Transparency of the SAM mask overlay
+  mask_color: [130, 130, 255] # Accent color for the mask
+
+  # Confirmation Dialog
+  confirmation_bg_color: [40, 40, 70] # Darker, slightly bluish for confirmation
+  confirmation_text_color: [255, 255, 180] # Light yellow for confirmation text
+  confirmation_panel_alpha: 0.9
