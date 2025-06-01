@@ -59,7 +59,7 @@ class OpenCVUI:
     def setup_window(self):
         log.info(f"Setting up OpenCV window: {self.window_name}")
         try:
-            cv2.namedWindow(self.window_name, cv2.WINDOW_NORMAL | cv2.WINDOW_KEEPRATIO)
+            cv2.namedWindow(self.window_name, cv2.WINDOW_GUI_NORMAL | cv2.WINDOW_KEEPRATIO)
             cv2.resizeWindow(self.window_name, self.window_width, self.window_height)
         except Exception as e:
             log.error(f"Failed to create or resize OpenCV window: {e}", exc_info=True)
