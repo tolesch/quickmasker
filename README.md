@@ -2,6 +2,10 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) QuickMasker is a tool for simple and efficient semi-automatic image segmentation using Meta AI's Segment Anything Model (SAM). Annotate objects in a folder of images by providing positive and negative point prompts, and save the generated masks in the standard COCO JSON format.
 
+<p align="center">
+  <img src="assets/quickmasker_demo.gif" alt="QuickMasker in action">
+</p>
+
 ## Installation
 
 1.  **Clone the Repository:**
