@@ -8,6 +8,7 @@ import numpy as np
 import logging
 from typing import Dict, Any, Callable, Optional, List, Tuple
 from .config import FONT_MAP
+from pycocotools import mask as mask_util
 
 log = logging.getLogger(__name__)
 
@@ -45,6 +46,10 @@ class OpenCVUI:
         self.confirmation_bg_color = tuple(self.config.get("confirmation_bg_color", [40, 40, 70]))
         self.confirmation_text_color = tuple(self.config.get("confirmation_text_color", [255, 255, 180]))
         self.confirmation_panel_alpha = self.config.get("confirmation_panel_alpha", 0.9)
+
+        # Bounding box
+        self.bbox_color = tuple(self.config.get("bbox_color", [255, 200, 50]))
+        self.bbox_thickness = self.config.get("bbox_thickness", 2)
 
         self.window_width = self.config.get("window_width", 1600)
         self.window_height = self.config.get("window_height", 900)
@@ -206,6 +211,37 @@ class OpenCVUI:
                             color = self.positive_color if point_labels[i] == 1 else self.negative_color
                             cv2.circle(main_canvas, (scaled_pt_x, scaled_pt_y), self.point_radius, color, -1)
                             cv2.circle(main_canvas, (scaled_pt_x, scaled_pt_y), self.point_radius, (0,0,0), 1)
+
+                ## Drawing logic for viewer annotations
+                viewer_annotations = status_info.get("viewer_annotations", [])
+                viewer_display_mode = status_info.get("viewer_display_mode")
+
+                # Draw viewer masks
+                if viewer_display_mode in ["BOTH", "MASK"]:
+                    img_area_on_canvas = main_canvas[offset_y: offset_y + scaled_h, offset_x: offset_x + scaled_w]
+                    for ann in viewer_annotations:
+                        segmentation = ann.get("segmentation")
+                        if segmentation and scaled_w > 0 and scaled_h > 0:
+                            mask = mask_util.decode(segmentation) # Assumes pycocotools is available
+                            scaled_mask = cv2.resize(mask.astype(np.uint8), (scaled_w, scaled_h), interpolation=cv2.INTER_NEAREST) > 0
+                            if img_area_on_canvas.shape[:2] == scaled_mask.shape:
+                                roi = img_area_on_canvas[scaled_mask]
+                                if roi.size > 0:
+                                    blended_roi = cv2.addWeighted(roi, 1 - self.mask_alpha, np.full_like(roi, self.mask_color), self.mask_alpha, 0)
+                                    img_area_on_canvas[scaled_mask] = blended_roi
+                
+                # Draw viewer bounding boxes
+                if viewer_display_mode in ["BOTH", "BOX"]:
+                    for ann in viewer_annotations:
+                        if 'bbox' in ann:
+                            x, y, w, h = [int(v) for v in ann['bbox']]
+                            # Scale the bbox coordinates
+                            scaled_x = offset_x + int(x * self.image_scale_factor)
+                            scaled_y = offset_y + int(y * self.image_scale_factor)
+                            scaled_w_box = int(w * self.image_scale_factor)
+                            scaled_h_box = int(h * self.image_scale_factor)
+                            cv2.rectangle(main_canvas, (scaled_x, scaled_y), (scaled_x + scaled_w_box, scaled_y + scaled_h_box), self.bbox_color, self.bbox_thickness)
+
             else: # Image invalid or region too small
                 self.image_display_rect = (img_region_x, img_region_y, img_region_w, img_region_h)
                 self.image_scale_factor = 1.0; self.image_offset_in_display_rect = (0,0)

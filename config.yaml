@@ -4,8 +4,8 @@ paths:
   # REQUIRED: Update these paths
   image_folder: "./data/cat_examples/" # Folder containing your JPG/PNG images
   # Optional: Default locations
-  output_coco_file: "./output_annotations.json" # Where final COCO annotations are saved
-  state_file: "./annotation_state.json" # Stores progress (current image, annotations)
+  output_coco_file: "./data/output_annotations.json" # Where final COCO annotations are saved
+  state_file: "./data/annotation_state.json" # Stores progress (current image, annotations)
   sam_checkpoint_dir: "./sam_models/" # Where to download/store the SAM model .pth file
 
 sam_model:
@@ -47,3 +47,7 @@ ui:
   confirmation_bg_color: [40, 40, 70] # Darker, slightly bluish for confirmation
   confirmation_text_color: [255, 255, 180] # Light yellow for confirmation text
   confirmation_panel_alpha: 0.9
+
+  # Bounding Box
+  bbox_color: [255, 200, 50]  # A nice amber/yellow for the box
+  bbox_thickness: 2

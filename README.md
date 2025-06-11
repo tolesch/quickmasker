@@ -70,6 +70,10 @@ Before running, you need to configure QuickMasker by editing the `config.yaml` f
         ```bash
         quickmasker -c path/to/your/other_config.yaml
         ```
+    * To view your annotations, run
+        ```bash
+        python tools/view_annotations.py
+        ```
 
 4.  **First Run:** The tool will download the specified SAM model checkpoint file (e.g., `sam_vit_b_01ec64.pth`) if it's not already present.
 
